@@ -20,7 +20,7 @@ export function WorkspaceSwitcher() {
           <div className="flex h-6 w-6 items-center justify-center rounded bg-blue-100 text-blue-700">
             <Building className="h-4 w-4" />
           </div>
-          <span className="truncate font-medium text-gray-900">{activeOrganization.name}</span>
+          <span className="truncate font-medium text-gray-900">{activeOrganization!.name}</span>
         </div>
         <ChevronsUpDown className="h-4 w-4 text-gray-500 shrink-0" />
       </button>
@@ -37,16 +37,16 @@ export function WorkspaceSwitcher() {
                 }}
                 className={cn(
                   "flex w-full items-center justify-between rounded-sm px-2 py-1.5 text-sm hover:bg-gray-100 focus:bg-gray-100 focus:outline-none",
-                  activeOrganization.id === org.id ? "bg-gray-50" : ""
+                  activeOrganization!.id === org.id ? "bg-gray-50" : ""
                 )}
               >
                 <span className={cn(
                   "truncate",
-                  activeOrganization.id === org.id ? "font-medium text-gray-900" : "text-gray-700"
+                  activeOrganization!.id === org.id ? "font-medium text-gray-900" : "text-gray-700"
                 )}>
                   {org.name}
                 </span>
-                {activeOrganization.id === org.id && <Check className="h-4 w-4 text-blue-600" />}
+                {activeOrganization!.id === org.id && <Check className="h-4 w-4 text-blue-600" />}
               </button>
             ))}
           </div>

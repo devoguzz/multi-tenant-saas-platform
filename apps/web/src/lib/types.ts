@@ -1,8 +1,18 @@
-export type UserRole = "ADMIN" | "MEMBER" | "GUEST";
+export type UserRole = "OWNER" | "ADMIN" | "MEMBER" | "VIEWER";
 export type ProjectStatus = "PLANNING" | "ACTIVE" | "ON_HOLD" | "COMPLETED";
 export type TaskPriority = "LOW" | "MEDIUM" | "HIGH" | "URGENT";
 export type TaskStatus = "TODO" | "IN_PROGRESS" | "REVIEW" | "DONE";
-export type ActivityType = "PROJECT_CREATED" | "TASK_COMPLETED" | "MEMBER_INVITED" | "TASK_STATUS_CHANGED";
+export type ActivityType = 
+  | "CLIENT_CREATED" 
+  | "CLIENT_EDITED" 
+  | "PROJECT_CREATED" 
+  | "PROJECT_EDITED" 
+  | "TASK_CREATED" 
+  | "TASK_STATUS_CHANGED" 
+  | "TASK_COMPLETED" 
+  | "MEMBER_INVITED" 
+  | "MEMBER_ROLE_CHANGED"
+  | "WORKSPACE_CREATED";
 
 export interface Organization {
   id: string;
@@ -21,10 +31,19 @@ export interface User {
   status: "ONLINE" | "OFFLINE" | "BUSY";
 }
 
+export interface Client {
+  id: string;
+  name: string;
+  website: string;
+  industry: string;
+  status: "ACTIVE" | "INACTIVE";
+  organizationId: string;
+}
+
 export interface Project {
   id: string;
   name: string;
-  client: string;
+  clientId: string | null;
   status: ProjectStatus;
   progress: number;
   dueDate: string;
@@ -49,4 +68,16 @@ export interface Activity {
   userId: string;
   createdAt: string;
   organizationId: string;
+}
+
+export interface Notification {
+  id: string;
+  type: string;
+  title: string;
+  message: string;
+  read: boolean;
+  createdAt: string;
+  link?: string;
+  organizationId: string;
+  userId: string;
 }

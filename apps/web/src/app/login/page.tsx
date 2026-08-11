@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { db } from "@/lib/data/db";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address." }),
@@ -43,11 +44,14 @@ export default function LoginPage() {
     setIsLoading(true);
     setError("");
 
-    // Simulate network delay and frontend-only auth
-    setTimeout(() => {
+    setTimeout(async () => {
+      const success = await db.login(data.email);
       setIsLoading(false);
-      // For this phase, any valid email/password form submission "succeeds" locally.
-      router.push("/dashboard");
+      if (success) {
+        router.push("/dashboard");
+      } else {
+        setError("Invalid email or password. Use alex@northstar.com or casey@meridian.com for demo.");
+      }
     }, 800);
   };
 
@@ -122,6 +126,18 @@ export default function LoginPage() {
             <Link href="/register" className="text-blue-600 hover:underline">
               Create one
             </Link>
+          </div>
+          <div className="pt-2">
+            <button 
+              onClick={(e) => {
+                e.preventDefault();
+                localStorage.clear();
+                window.location.reload();
+              }}
+              className="text-xs text-red-500 hover:underline"
+            >
+              Reset local database
+            </button>
           </div>
         </CardFooter>
       </Card>

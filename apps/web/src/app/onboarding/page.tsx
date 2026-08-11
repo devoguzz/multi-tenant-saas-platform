@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { db } from "@/lib/data/db";
 
 const onboardingSchema = z.object({
   organizationName: z.string().min(2, { message: "Organization name is required." }),
@@ -47,10 +48,22 @@ export default function OnboardingPage() {
   const onSubmit = async (data: OnboardingFormValues) => {
     setIsLoading(true);
 
-    // Simulate network delay and frontend-only workspace creation
-    setTimeout(() => {
+    setTimeout(async () => {
       setIsLoading(false);
-      // Success simulation: push to dashboard
+      
+      const pendingData = localStorage.getItem("pending_registration");
+      const ownerName = pendingData ? JSON.parse(pendingData).name : "New User";
+      const ownerEmail = pendingData ? JSON.parse(pendingData).email : "user@example.com";
+
+      const orgId = `org_${Date.now()}`;
+      await db.createOrganization({
+        id: orgId,
+        name: data.organizationName,
+        slug: data.organizationSlug,
+        plan: "PRO",
+      }, ownerName, ownerEmail);
+      
+      localStorage.removeItem("pending_registration");
       router.push("/dashboard");
     }, 1000);
   };

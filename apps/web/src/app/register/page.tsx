@@ -47,10 +47,10 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterFormValues) => {
     setIsLoading(true);
 
-    // Simulate network delay and frontend-only auth
     setTimeout(() => {
       setIsLoading(false);
-      // For this phase, any valid registration submission "succeeds" locally.
+      // Save pending registration for onboarding
+      localStorage.setItem("pending_registration", JSON.stringify({ name: data.name, email: data.email }));
       router.push("/onboarding");
     }, 800);
   };

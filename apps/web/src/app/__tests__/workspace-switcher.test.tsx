@@ -6,7 +6,7 @@ import { WorkspaceSwitcher } from "../../components/layout/workspace-switcher";
 // A dummy component to observe context changes
 function ContextObserver() {
   const { activeOrganization } = useWorkspace();
-  return <div data-testid="active-org">{activeOrganization.name}</div>;
+  return <div data-testid="active-org">{activeOrganization?.name ?? "None"}</div>;
 }
 
 describe("Workspace Switcher", () => {

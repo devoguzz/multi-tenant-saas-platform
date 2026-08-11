@@ -1,4 +1,4 @@
-import { Organization, User, Project, Task, Activity } from "./types";
+import { Organization, User, Project, Task, Activity, Client, Notification } from "./types";
 
 export const mockOrganizations: Organization[] = [
   { id: "org_1", name: "Northstar Studio", slug: "northstar", plan: "PRO" },
@@ -6,19 +6,67 @@ export const mockOrganizations: Organization[] = [
 ];
 
 export const mockUsers: User[] = [
-  { id: "usr_1", name: "Alice Freeman", email: "alice@northstar.co", role: "ADMIN", organizationId: "org_1", status: "ONLINE" },
-  { id: "usr_2", name: "Bob Smith", email: "bob@northstar.co", role: "MEMBER", organizationId: "org_1", status: "BUSY" },
-  { id: "usr_3", name: "Charlie Davis", email: "charlie@meridian.io", role: "ADMIN", organizationId: "org_2", status: "ONLINE" },
-  { id: "usr_4", name: "Diana Prince", email: "diana@meridian.io", role: "MEMBER", organizationId: "org_2", status: "OFFLINE" },
+  {
+    id: "usr_1",
+    email: "alex@northstar.com",
+    name: "Alex Rivera",
+    role: "OWNER",
+    organizationId: "org_1",
+    status: "ONLINE",
+  },
+  {
+    id: "usr_2",
+    email: "sam@northstar.com",
+    name: "Sam Chen",
+    role: "ADMIN",
+    organizationId: "org_1",
+    status: "BUSY",
+  },
+  {
+    id: "usr_3",
+    email: "taylor@northstar.com",
+    name: "Taylor Smith",
+    role: "MEMBER",
+    organizationId: "org_1",
+    status: "OFFLINE",
+  },
+  {
+    id: "usr_4",
+    email: "jordan@northstar.com",
+    name: "Jordan Lee",
+    role: "VIEWER",
+    organizationId: "org_1",
+    status: "ONLINE",
+  },
+  {
+    id: "usr_5",
+    email: "casey@meridian.com",
+    name: "Casey Jones",
+    role: "OWNER",
+    organizationId: "org_2",
+    status: "ONLINE",
+  }
 ];
 
 export const mockCurrentUser = mockUsers[0];
 
+export const mockNotifications: Notification[] = [
+  { id: "notif_1", type: "mention", title: "New mention", message: "New comment on Website Redesign", read: false, link: "/projects/proj_1", organizationId: "org_1", userId: "usr_1", createdAt: "2026-08-12T09:00:00Z" },
+  { id: "notif_2", type: "system", title: "Approval", message: "Your project was approved", read: true, link: "/projects/proj_2", organizationId: "org_1", userId: "usr_1", createdAt: "2026-08-11T16:00:00Z" },
+];
+
+export const mockClients: Client[] = [
+  { id: "cli_1", name: "Acme Corp", website: "acme.com", industry: "Manufacturing", status: "ACTIVE", organizationId: "org_1" },
+  { id: "cli_2", name: "Globex", website: "globex.com", industry: "Logistics", status: "ACTIVE", organizationId: "org_1" },
+  { id: "cli_3", name: "Initech", website: "initech.com", industry: "Software", status: "INACTIVE", organizationId: "org_1" },
+  { id: "cli_4", name: "Umbrella Corp", website: "umbrella.com", industry: "Biotech", status: "ACTIVE", organizationId: "org_2" },
+];
+
 export const mockProjects: Project[] = [
-  { id: "prj_1", name: "Website Redesign", client: "Acme Corp", status: "ACTIVE", progress: 65, dueDate: "2026-09-01", organizationId: "org_1" },
-  { id: "prj_2", name: "Mobile App MVP", client: "Globex", status: "PLANNING", progress: 10, dueDate: "2026-10-15", organizationId: "org_1" },
-  { id: "prj_3", name: "Marketing Campaign", client: "Initech", status: "COMPLETED", progress: 100, dueDate: "2026-08-01", organizationId: "org_1" },
-  { id: "prj_4", name: "Data Migration", client: "Umbrella Corp", status: "ACTIVE", progress: 40, dueDate: "2026-09-20", organizationId: "org_2" },
+  { id: "prj_1", name: "Website Redesign", clientId: "cli_1", status: "ACTIVE", progress: 65, dueDate: "2026-09-01", organizationId: "org_1" },
+  { id: "prj_2", name: "Mobile App MVP", clientId: "cli_2", status: "PLANNING", progress: 10, dueDate: "2026-10-15", organizationId: "org_1" },
+  { id: "prj_3", name: "Marketing Campaign", clientId: "cli_3", status: "COMPLETED", progress: 100, dueDate: "2026-08-01", organizationId: "org_1" },
+  { id: "prj_4", name: "Data Migration", clientId: "cli_4", status: "ACTIVE", progress: 40, dueDate: "2026-09-20", organizationId: "org_2" },
 ];
 
 export const mockTasks: Task[] = [
@@ -39,6 +87,7 @@ export function getMockData(organizationId: string) {
   return {
     organization: mockOrganizations.find((org) => org.id === organizationId),
     users: mockUsers.filter((user) => user.organizationId === organizationId),
+    clients: mockClients.filter((client) => client.organizationId === organizationId),
     projects: mockProjects.filter((project) => project.organizationId === organizationId),
     tasks: mockTasks.filter((task) => task.organizationId === organizationId),
     activities: mockActivities.filter((activity) => activity.organizationId === organizationId),

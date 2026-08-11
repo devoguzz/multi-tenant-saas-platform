@@ -3,13 +3,16 @@
 import React from "react";
 import { FolderKanban, CheckSquare, Clock, AlertCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { mockCurrentUser, getMockData } from "@/lib/mock-data";
 import { useWorkspace } from "@/lib/context";
+import { useOrganizationData, useDB } from "@/lib/data/hooks";
 import { toast } from "sonner";
 
 export default function DashboardPage() {
-  const { activeOrganization } = useWorkspace();
-  const context = getMockData(activeOrganization.id);
+  const { activeOrganization, currentUser } = useWorkspace();
+  const context = useOrganizationData();
+  const { db } = useDB();
+  
+  if (!context || !currentUser) return null;
   const { projects, tasks, activities, users } = context;
 
   const activeProjectsCount = projects.filter(p => p.status === "ACTIVE").length;
@@ -21,7 +24,7 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-gray-900">Dashboard</h1>
-        <p className="text-sm text-gray-500">Welcome back, {mockCurrentUser.name}</p>
+        <p className="text-sm text-gray-500">Welcome back, {currentUser.name}</p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -82,7 +85,9 @@ export default function DashboardPage() {
                 <div key={project.id} className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium leading-none">{project.name}</p>
-                    <p className="text-sm text-gray-500">{project.client}</p>
+                    <p className="text-sm text-gray-500">
+                      {context.clients.find(c => c.id === project.clientId)?.name || "Internal"}
+                    </p>
                   </div>
                   <div className="flex flex-col items-end gap-1">
                     <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
@@ -103,13 +108,22 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {tasks.filter(t => t.assigneeId === mockCurrentUser.id).slice(0, 4).map(task => (
+              {tasks.filter(t => t.assigneeId === currentUser.id).slice(0, 4).map(task => (
                 <div key={task.id} className="flex items-start justify-between">
                   <div className="flex gap-3">
                     <input 
                       type="checkbox" 
+                      checked={task.status === "DONE"}
                       className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600"
-                      onChange={() => toast.info("Task completion coming soon")}
+                      onChange={async (e) => {
+                        const newStatus = e.target.checked ? "DONE" : "TODO";
+                        try {
+                          await db.updateTask(task.id, { status: newStatus });
+                          toast.success(`Task marked as ${newStatus === "DONE" ? "completed" : "todo"}`);
+                        } catch (error) {
+                          toast.error("Failed to update task");
+                        }
+                      }}
                     />
                     <div>
                       <p className="text-sm font-medium leading-none">{task.title}</p>
