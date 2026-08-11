@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { format } from "date-fns";
 import { useOrganizationData } from "@/lib/data/hooks";
 import { ActivitySquare, FolderKanban, CheckSquare, Users, Building2, Bell, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -9,14 +10,16 @@ export default function ActivityPage() {
   const context = useOrganizationData();
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState("ALL");
+  const [actorFilter, setActorFilter] = useState("ALL");
 
   if (!context) return null;
 
   const activities = context.activities
-    .filter(a => {
-      const matchesSearch = a.description.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesType = typeFilter === "ALL" || a.type.startsWith(typeFilter);
-      return matchesSearch && matchesType;
+    .filter(activity => {
+      const matchesSearch = activity.description.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesType = typeFilter === "ALL" || activity.type.startsWith(typeFilter);
+      const matchesActor = actorFilter === "ALL" || activity.userId === actorFilter;
+      return matchesSearch && matchesType && matchesActor;
     })
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
@@ -62,6 +65,16 @@ export default function ActivityPage() {
           <option value="MEMBER">Members</option>
           <option value="WORKSPACE">Workspace</option>
         </select>
+        <select
+          value={actorFilter}
+          onChange={(e) => setActorFilter(e.target.value)}
+          className="flex h-9 w-full sm:w-[180px] rounded-md border border-gray-200 bg-white px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950"
+        >
+          <option value="ALL">All Members</option>
+          {context.users.map(u => (
+            <option key={u.id} value={u.id}>{u.name}</option>
+          ))}
+        </select>
       </div>
 
       <div className="rounded-md border bg-white shadow-sm overflow-hidden">
@@ -99,9 +112,7 @@ export default function ActivityPage() {
                             </p>
                           </div>
                           <div className="whitespace-nowrap text-right text-xs text-gray-400">
-                            {new Date(activity.createdAt).toLocaleDateString(undefined, {
-                              year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-                            })}
+                            {format(new Date(activity.createdAt), "d MMM yyyy")}
                           </div>
                         </div>
                       </div>

@@ -95,7 +95,7 @@ export function TopBar({ onMenuClick }: { onMenuClick: () => void }) {
                 type="search"
                 autoComplete="off"
                 className="h-9 w-full rounded-md border-0 bg-gray-50 pl-10 pr-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
-                placeholder="Search projects and tasks..."
+                placeholder="Search workspace..."
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
@@ -208,11 +208,11 @@ export function TopBar({ onMenuClick }: { onMenuClick: () => void }) {
                 <p className="text-xs text-gray-500 truncate">{currentUser.email}</p>
               </div>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => router.push("/settings")}>
+              <DropdownMenuItem onClick={() => router.push("/settings?tab=PROFILE")}>
                 <User className="mr-2 h-4 w-4" />
                 <span>Profile</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push("/settings")}>
+              <DropdownMenuItem onClick={() => router.push("/settings?tab=WORKSPACE")}>
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Settings</span>
               </DropdownMenuItem>

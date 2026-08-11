@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { format } from "date-fns";
 import { FolderKanban, CheckSquare, Clock, AlertCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useWorkspace } from "@/lib/context";
@@ -127,7 +128,7 @@ export default function DashboardPage() {
                     />
                     <div>
                       <p className="text-sm font-medium leading-none">{task.title}</p>
-                      <p className="text-sm text-gray-500 mt-1">Due {new Date(task.dueDate).toLocaleDateString()}</p>
+                      <p className="text-sm text-gray-500 mt-1">Due {format(new Date(task.dueDate), "d MMM yyyy")}</p>
                     </div>
                   </div>
                   <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset ${
@@ -163,7 +164,7 @@ export default function DashboardPage() {
                         <span className="text-gray-500">{activity.description}</span>
                       </p>
                       <p className="text-xs text-gray-400 mt-0.5">
-                        {new Date(activity.createdAt).toLocaleDateString()}
+                        {format(new Date(activity.createdAt), "d MMM yyyy")}
                       </p>
                     </div>
                   </div>

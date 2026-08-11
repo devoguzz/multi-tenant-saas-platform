@@ -1,6 +1,7 @@
 "use client";
 
 import React, { use } from "react";
+import { format } from "date-fns";
 import { useOrganizationData } from "@/lib/data/hooks";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
@@ -68,20 +69,48 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
               <div className="flex items-center gap-3">
                 <Clock className="h-4 w-4 text-gray-400" />
                 <span className="text-sm text-gray-900">
-                  Due {new Date(project.dueDate).toLocaleDateString()}
+                  Due {format(new Date(project.dueDate), "d MMM yyyy")}
                 </span>
               </div>
               
               <div className="pt-4 border-t border-gray-100">
                 <div className="flex justify-between text-sm mb-2">
                   <span className="text-gray-500">Progress</span>
-                  <span className="font-medium text-gray-900">{project.progress}%</span>
+                  <span className="font-medium text-gray-900">{projectTasks.length === 0 ? "—" : `${project.progress}%`}</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${project.progress}%` }}></div>
                 </div>
-                <p className="text-xs text-gray-500 mt-2">{completedTasks} of {projectTasks.length} tasks completed</p>
+                <p className="text-xs text-gray-500 mt-2">
+                  {projectTasks.length === 0 ? "No tasks yet" : `${completedTasks} of ${projectTasks.length} tasks completed`}
+                </p>
               </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="text-base font-semibold">Team Members</CardTitle>
+              <Badge variant="outline">{members.length}</Badge>
+            </CardHeader>
+            <CardContent>
+              {members.length === 0 ? (
+                <p className="text-sm text-gray-500">No members assigned to tasks.</p>
+              ) : (
+                <div className="space-y-4">
+                  {members.map(member => (
+                    <div key={member.id} className="flex items-center gap-3">
+                      <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-medium text-xs">
+                        {member.name.charAt(0)}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">{member.name}</p>
+                        <p className="text-xs text-gray-500">{member.role}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -159,7 +188,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
                             <span className="font-medium">{user?.name || "Someone"}</span> {activity.description}
                           </p>
                           <p className="text-xs text-gray-500 mt-0.5">
-                            {new Date(activity.createdAt).toLocaleDateString()} at {new Date(activity.createdAt).toLocaleTimeString()}
+                            {format(new Date(activity.createdAt), "d MMM yyyy")} at {format(new Date(activity.createdAt), "HH:mm")}
                           </p>
                         </div>
                       </div>
@@ -171,34 +200,6 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
           </Card>
         </div>
 
-        {/* Right column for project members */}
-        <div className="lg:col-span-1 space-y-6">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-base font-semibold">Team Members</CardTitle>
-              <Badge variant="outline">{members.length}</Badge>
-            </CardHeader>
-            <CardContent>
-              {members.length === 0 ? (
-                <p className="text-sm text-gray-500">No members assigned to tasks.</p>
-              ) : (
-                <div className="space-y-4">
-                  {members.map(member => (
-                    <div key={member.id} className="flex items-center gap-3">
-                      <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-medium text-xs">
-                        {member.name.charAt(0)}
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">{member.name}</p>
-                        <p className="text-xs text-gray-500">{member.role}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
       </div>
     </div>
   );

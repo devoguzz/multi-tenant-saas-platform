@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, Suspense } from "react";
+import { format } from "date-fns";
 import { useOrganizationData, useDB } from "@/lib/data/hooks";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -189,7 +190,7 @@ function TasksContent() {
                       </div>
                       <div className="flex items-center justify-between mt-auto pt-3 border-t border-gray-50">
                         <div className="text-[11px] text-gray-400 font-medium">
-                          {new Date(task.dueDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                          {format(new Date(task.dueDate), "d MMM yyyy")}
                         </div>
                         {assignee && (
                           <div className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-blue-700 text-[11px] font-semibold border border-white shadow-sm" title={assignee.name}>
@@ -257,7 +258,7 @@ function TasksContent() {
                       </select>
                     </td>
                     <td className="px-6 py-4 text-gray-500">
-                      {new Date(task.dueDate).toLocaleDateString()}
+                      {format(new Date(task.dueDate), "d MMM yyyy")}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <DropdownMenu>

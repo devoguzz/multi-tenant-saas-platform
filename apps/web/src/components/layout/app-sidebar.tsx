@@ -29,7 +29,7 @@ export function AppSidebar({
   const sidebarContent = (
     <div className="flex h-full flex-col bg-white border-r border-gray-200">
       <div className="flex h-16 shrink-0 items-center px-4 justify-between md:justify-center">
-        <span className="text-xl font-bold tracking-tight text-gray-900">Platform</span>
+        <span className="text-xl font-bold tracking-tight text-gray-900">Nexus</span>
         <Button 
           variant="ghost" 
           size="icon" 

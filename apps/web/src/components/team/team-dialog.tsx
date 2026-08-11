@@ -43,7 +43,7 @@ export function TeamDialog({ isOpen, onOpenChange, user }: TeamDialogProps) {
           status: "OFFLINE",
           organizationId: activeOrganization!.id,
         });
-        toast.success("Team member invited");
+        toast.success("Demo invitation created. No email was sent.");
       }
       onOpenChange(false);
     } catch (error) {
@@ -81,10 +81,10 @@ export function TeamDialog({ isOpen, onOpenChange, user }: TeamDialogProps) {
             >
               <option value="ADMIN">Admin</option>
               <option value="MEMBER">Member</option>
-              <option value="GUEST">Guest</option>
+              <option value="VIEWER">Viewer</option>
             </select>
-            <p className="text-xs text-gray-500 mt-1">
-              Admins have full access. Members can edit data. Guests have read-only access.
+            <p className="text-xs text-gray-500">
+              Admins have full access. Members can edit data. Viewers have read-only access.
             </p>
           </div>
           <DialogFooter className="mt-6">

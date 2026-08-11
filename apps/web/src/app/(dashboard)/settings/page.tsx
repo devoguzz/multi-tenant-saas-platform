@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useWorkspace } from "@/lib/context";
+import { useSearchParams } from "next/navigation";
 import { useDB, useOrganizationData } from "@/lib/data/hooks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,12 +12,21 @@ import { mockCurrentUser } from "@/lib/mock-data";
 import { toast } from "sonner";
 import { AlertTriangle, HardDrive, User as UserIcon, Building, Settings2 } from "lucide-react";
 
-export default function SettingsPage() {
+function SettingsContent() {
   const { activeOrganization, currentUser } = useWorkspace();
   const context = useOrganizationData();
   const { db } = useDB();
   
-  const [activeTab, setActiveTab] = useState("PROFILE");
+  const searchParams = useSearchParams();
+  const initialTab = searchParams.get("tab") || "PROFILE";
+  const [activeTab, setActiveTab] = useState(initialTab);
+  
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
   
   const [name, setName] = useState(currentUser?.name || "");
   const [email, setEmail] = useState(currentUser?.email || "");
@@ -141,5 +151,13 @@ export default function SettingsPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function SettingsPage() {
+  return (
+    <Suspense fallback={<div>Loading settings...</div>}>
+      <SettingsContent />
+    </Suspense>
   );
 }

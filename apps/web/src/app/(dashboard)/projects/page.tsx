@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { format } from "date-fns";
 import { useOrganizationData, useDB } from "@/lib/data/hooks";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,7 @@ export default function ProjectsPage() {
   const { db } = useDB();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
+  const [clientFilter, setClientFilter] = useState("ALL");
   const [sortOrder, setSortOrder] = useState("dueDate_asc");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | undefined>();
@@ -32,7 +34,8 @@ export default function ProjectsPage() {
     .filter(project => {
       const matchesSearch = project.name.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesStatus = statusFilter === "ALL" || project.status === statusFilter;
-      return matchesSearch && matchesStatus;
+      const matchesClient = clientFilter === "ALL" || (clientFilter === "INTERNAL" && !project.clientId) || project.clientId === clientFilter;
+      return matchesSearch && matchesStatus && matchesClient;
     })
     .sort((a, b) => {
       if (sortOrder === "dueDate_asc") return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
@@ -97,6 +100,17 @@ export default function ProjectsPage() {
           <option value="ACTIVE">Active</option>
           <option value="ON_HOLD">On Hold</option>
           <option value="COMPLETED">Completed</option>
+        </select>
+        <select
+          value={clientFilter}
+          onChange={(e) => setClientFilter(e.target.value)}
+          className="flex h-9 w-full sm:w-[160px] rounded-md border border-gray-200 bg-white px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950"
+        >
+          <option value="ALL">All Clients</option>
+          <option value="INTERNAL">Internal</option>
+          {context.clients.map(c => (
+            <option key={c.id} value={c.id}>{c.name}</option>
+          ))}
         </select>
         <select
           value={sortOrder}
@@ -174,7 +188,7 @@ export default function ProjectsPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4 text-gray-500">
-                        {new Date(project.dueDate).toLocaleDateString()}
+                        {format(new Date(project.dueDate), "d MMM yyyy")}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <DropdownMenu>

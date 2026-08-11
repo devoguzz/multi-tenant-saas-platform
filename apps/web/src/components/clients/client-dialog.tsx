@@ -72,7 +72,25 @@ export function ClientDialog({ isOpen, onOpenChange, client }: ClientDialogProps
           </div>
           <div className="space-y-2">
             <Label htmlFor="industry">Industry</Label>
-            <Input id="industry" value={industry} onChange={(e) => setIndustry(e.target.value)} placeholder="Manufacturing" />
+            <select
+              id="industry"
+              required
+              value={industry}
+              onChange={(e) => setIndustry(e.target.value)}
+              disabled={isLoading}
+              className="flex h-9 w-full rounded-md border border-gray-200 bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <option value="" disabled>Select an industry...</option>
+              <option value="Technology">Technology</option>
+              <option value="Software">Software</option>
+              <option value="Financial Services">Financial Services</option>
+              <option value="E-commerce">E-commerce</option>
+              <option value="Healthcare">Healthcare</option>
+              <option value="Manufacturing">Manufacturing</option>
+              <option value="Logistics">Logistics</option>
+              <option value="Professional Services">Professional Services</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
           {isEditing && (
             <div className="space-y-2">

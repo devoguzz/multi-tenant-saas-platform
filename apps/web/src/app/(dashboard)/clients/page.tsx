@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { format } from "date-fns";
 import { useOrganizationData, useDB } from "@/lib/data/hooks";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -127,12 +128,19 @@ export default function ClientsPage() {
                   <th className="px-6 py-3 font-medium">Industry</th>
                   <th className="px-6 py-3 font-medium">Status</th>
                   <th className="px-6 py-3 font-medium">Projects</th>
+                  <th className="px-6 py-3 font-medium">Last Activity</th>
                   <th className="px-6 py-3 font-medium text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {clients.map((client) => {
                   const clientProjects = context.projects.filter(p => p.clientId === client.id);
+                  const clientActivities = context.activities.filter(a => 
+                    (a.type.includes("CLIENT") && a.description.includes(client.name)) || 
+                    clientProjects.some(p => a.description.includes(p.name))
+                  ).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+                  const lastActivity = clientActivities[0];
+                  
                   return (
                     <tr key={client.id} className="bg-white border-b hover:bg-gray-50 last:border-0 transition-colors">
                       <td className="px-6 py-4 font-medium text-gray-900">
@@ -153,6 +161,9 @@ export default function ClientsPage() {
                       </td>
                       <td className="px-6 py-4 text-gray-500">
                         {clientProjects.length}
+                      </td>
+                      <td className="px-6 py-4 text-gray-500">
+                        {lastActivity ? format(new Date(lastActivity.createdAt), "d MMM yyyy") : "—"}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <DropdownMenu>

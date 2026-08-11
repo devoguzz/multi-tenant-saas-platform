@@ -1,6 +1,7 @@
 "use client";
 
 import React, { use } from "react";
+import { format } from "date-fns";
 import { useOrganizationData } from "@/lib/data/hooks";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
@@ -70,6 +71,42 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
               )}
             </CardContent>
           </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="text-base font-semibold">Key Contacts</CardTitle>
+              <Button size="icon" variant="ghost" className="h-8 w-8 text-gray-500">
+                <Users className="h-4 w-4" />
+              </Button>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="p-3 border border-gray-100 rounded-lg bg-gray-50">
+                <h4 className="font-medium text-sm text-gray-900">John Doe</h4>
+                <p className="text-xs text-gray-500 mb-2">CEO & Founder</p>
+                <div className="flex items-center gap-2 text-xs text-gray-600 mb-1">
+                  <Mail className="h-3 w-3" />
+                  john@{client.website || "example.com"}
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-600">
+                  <Phone className="h-3 w-3" />
+                  +1 (555) 123-4567
+                </div>
+              </div>
+              
+              <div className="p-3 border border-gray-100 rounded-lg bg-gray-50">
+                <h4 className="font-medium text-sm text-gray-900">Jane Smith</h4>
+                <p className="text-xs text-gray-500 mb-2">Head of Operations</p>
+                <div className="flex items-center gap-2 text-xs text-gray-600 mb-1">
+                  <Mail className="h-3 w-3" />
+                  jane@{client.website || "example.com"}
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-600">
+                  <Phone className="h-3 w-3" />
+                  +1 (555) 987-6543
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="lg:col-span-2 space-y-6">
@@ -98,7 +135,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
                           <Badge variant="outline">{project.status}</Badge>
                           <span className="flex items-center">
                             <Clock className="h-3 w-3 mr-1" />
-                            Due {new Date(project.dueDate).toLocaleDateString()}
+                            Due {format(new Date(project.dueDate), "d MMM yyyy")}
                           </span>
                         </div>
                       </div>
@@ -133,7 +170,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
                             <span className="font-medium">{user?.name || "Someone"}</span> {activity.description}
                           </p>
                           <p className="text-xs text-gray-500 mt-0.5">
-                            {new Date(activity.createdAt).toLocaleDateString()} at {new Date(activity.createdAt).toLocaleTimeString()}
+                            {format(new Date(activity.createdAt), "d MMM yyyy")} at {format(new Date(activity.createdAt), "HH:mm")}
                           </p>
                         </div>
                       </div>
@@ -141,45 +178,6 @@ export default function ClientDetailPage({ params }: { params: Promise<{ id: str
                   })}
                 </div>
               )}
-            </CardContent>
-          </Card>
-        </div>
-        
-        {/* Right Sidebar (Contacts) */}
-        <div className="lg:col-span-1 space-y-6">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-base font-semibold">Key Contacts</CardTitle>
-              <Button size="icon" variant="ghost" className="h-8 w-8 text-gray-500">
-                <Users className="h-4 w-4" />
-              </Button>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="p-3 border border-gray-100 rounded-lg bg-gray-50">
-                <h4 className="font-medium text-sm text-gray-900">John Doe</h4>
-                <p className="text-xs text-gray-500 mb-2">CEO & Founder</p>
-                <div className="flex items-center gap-2 text-xs text-gray-600 mb-1">
-                  <Mail className="h-3 w-3" />
-                  john@{client.website || "example.com"}
-                </div>
-                <div className="flex items-center gap-2 text-xs text-gray-600">
-                  <Phone className="h-3 w-3" />
-                  +1 (555) 123-4567
-                </div>
-              </div>
-              
-              <div className="p-3 border border-gray-100 rounded-lg bg-gray-50">
-                <h4 className="font-medium text-sm text-gray-900">Jane Smith</h4>
-                <p className="text-xs text-gray-500 mb-2">Head of Operations</p>
-                <div className="flex items-center gap-2 text-xs text-gray-600 mb-1">
-                  <Mail className="h-3 w-3" />
-                  jane@{client.website || "example.com"}
-                </div>
-                <div className="flex items-center gap-2 text-xs text-gray-600">
-                  <Phone className="h-3 w-3" />
-                  +1 (555) 987-6543
-                </div>
-              </div>
             </CardContent>
           </Card>
         </div>

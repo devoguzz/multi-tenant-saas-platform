@@ -51,15 +51,15 @@ export const mockUsers: User[] = [
 export const mockCurrentUser = mockUsers[0];
 
 export const mockNotifications: Notification[] = [
-  { id: "notif_1", type: "mention", title: "New mention", message: "New comment on Website Redesign", read: false, link: "/projects/proj_1", organizationId: "org_1", userId: "usr_1", createdAt: "2026-08-12T09:00:00Z" },
-  { id: "notif_2", type: "system", title: "Approval", message: "Your project was approved", read: true, link: "/projects/proj_2", organizationId: "org_1", userId: "usr_1", createdAt: "2026-08-11T16:00:00Z" },
+  { id: "notif_1", type: "mention", title: "New mention", message: "New comment on Website Redesign", read: false, link: "/projects/proj_1", organizationId: "org_1", userId: "usr_1", createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() },
+  { id: "notif_2", type: "system", title: "Approval", message: "Your project was approved", read: true, link: "/projects/proj_2", organizationId: "org_1", userId: "usr_1", createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() },
 ];
 
 export const mockClients: Client[] = [
   { id: "cli_1", name: "Acme Corp", website: "acme.com", industry: "Manufacturing", status: "ACTIVE", organizationId: "org_1" },
   { id: "cli_2", name: "Globex", website: "globex.com", industry: "Logistics", status: "ACTIVE", organizationId: "org_1" },
   { id: "cli_3", name: "Initech", website: "initech.com", industry: "Software", status: "INACTIVE", organizationId: "org_1" },
-  { id: "cli_4", name: "Umbrella Corp", website: "umbrella.com", industry: "Biotech", status: "ACTIVE", organizationId: "org_2" },
+  { id: "cli_4", name: "Umbrella Corp", website: "umbrella.com", industry: "Healthcare", status: "ACTIVE", organizationId: "org_2" },
 ];
 
 export const mockProjects: Project[] = [
@@ -77,10 +77,10 @@ export const mockTasks: Task[] = [
 ];
 
 export const mockActivities: Activity[] = [
-  { id: "act_1", type: "TASK_STATUS_CHANGED", description: "moved 'Design homepage hero section' to In Progress", userId: "usr_1", createdAt: "2026-08-11T10:00:00Z", organizationId: "org_1" },
-  { id: "act_2", type: "PROJECT_CREATED", description: "created project 'Mobile App MVP'", userId: "usr_1", createdAt: "2026-08-10T14:30:00Z", organizationId: "org_1" },
-  { id: "act_3", type: "MEMBER_INVITED", description: "invited Bob Smith to the workspace", userId: "usr_1", createdAt: "2026-08-09T09:15:00Z", organizationId: "org_1" },
-  { id: "act_4", type: "TASK_COMPLETED", description: "completed 'Review Q3 strategy'", userId: "usr_2", createdAt: "2026-08-08T16:45:00Z", organizationId: "org_1" },
+  { id: "act_1", type: "TASK_STATUS_CHANGED", description: "moved 'Design homepage hero section' to In Progress", userId: "usr_1", createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(), organizationId: "org_1" },
+  { id: "act_2", type: "PROJECT_CREATED", description: "created project 'Mobile App MVP'", userId: "usr_1", createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(), organizationId: "org_1" },
+  { id: "act_3", type: "MEMBER_INVITED", description: "invited Bob Smith to the workspace", userId: "usr_1", createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), organizationId: "org_1" },
+  { id: "act_4", type: "TASK_COMPLETED", description: "completed 'Review Q3 strategy'", userId: "usr_2", createdAt: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString(), organizationId: "org_1" },
 ];
 
 export function getMockData(organizationId: string) {

@@ -6,7 +6,7 @@ import { Toaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Multi-Tenant SaaS Platform",
+  title: "Nexus - B2B SaaS Platform",
   description: "A production-focused B2B SaaS operations platform.",
 };
 
